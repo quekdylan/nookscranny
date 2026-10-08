@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nook's Cranny — apps, websites &amp; backends</title>
+  <meta name="description" content="Nook's Cranny is a small studio building iOS apps with React Native &amp; Expo, fast websites, and dependable backend systems.">
+  <meta property="og:title" content="Nook's Cranny">
+  <meta property="og:description" content="iOS apps, websites and backend systems — built with care.">
+  <meta property="og:url" content="https://nookscranny.dev">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#f6f3ee" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23b4532a'/%3E%3Cpath d='M18 46V18h6l16 18V18h6v28h-6L24 28v18z' fill='%23f6f3ee'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f6f3ee;
+      --surface: #fffdf9;
+      --ink: #1c1a17;
+      --muted: #6b655c;
+      --line: #e4ded3;
+      --accent: #b4532a;
+      --accent-soft: #f3e3d9;
+      --radius: 18px;
+      --max: 1080px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #141311;
+        --surface: #1c1b18;
+        --ink: #f1ece4;
+        --muted: #a39b8f;
+        --line: #2e2b27;
+        --accent: #e07a4f;
+        --accent-soft: #2f2119;
+      }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font: 400 17px/1.6 "Inter", system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+    /* Nav */
+    header {
+      position: sticky; top: 0; z-index: 10;
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid transparent;
+    }
+    nav { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 600; letter-spacing: -0.01em; }
+    .brand-mark {
+      width: 28px; height: 28px; border-radius: 8px; background: var(--accent);
+      display: grid; place-items: center; color: var(--bg);
+      font-family: "Instrument Serif", serif; font-size: 20px; line-height: 1;
+    }
+    .nav-links { display: flex; gap: 28px; list-style: none; font-size: 15px; }
+    .nav-links a { text-decoration: none; color: var(--muted); transition: color .2s; }
+    .nav-links a:hover { color: var(--ink); }
+
+    /* Hero */
+    .hero { padding: 96px 0 88px; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase;
+      color: var(--accent);
+    }
+    .eyebrow::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+    h1 {
+      font-family: "Instrument Serif", Georgia, serif; font-weight: 400;
+      font-size: clamp(44px, 8vw, 88px); line-height: 1.02; letter-spacing: -0.02em;
+      margin: 20px 0 24px; max-width: 14ch;
+    }
+    h1 em { color: var(--accent); }
+    .lede { font-size: clamp(18px, 2.2vw, 20px); color: var(--muted); max-width: 52ch; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 22px; border-radius: 999px; font-weight: 500; font-size: 15px;
+      text-decoration: none; transition: transform .15s, background .2s, border-color .2s;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--ink); color: var(--bg); }
+    .btn-ghost { border: 1px solid var(--line); }
+    .btn-ghost:hover { border-color: var(--muted); }
+
+    /* Section */
+    section { padding: 72px 0; }
+    .section-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px; margin-bottom: 40px; }
+    h2 {
+      font-family: "Instrument Serif", Georgia, serif; font-weight: 400;
+      font-size: clamp(34px, 5vw, 52px); line-height: 1.05; letter-spacing: -0.015em;
+    }
+    .section-head p { color: var(--muted); max-width: 40ch; }
+
+    /* Products */
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .card {
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 32px 28px; display: flex; flex-direction: column;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -24px rgba(0,0,0,.25); border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); }
+    .icon {
+      width: 48px; height: 48px; border-radius: 14px; background: var(--accent-soft); color: var(--accent);
+      display: grid; place-items: center; margin-bottom: 28px;
+    }
+    .icon svg { width: 24px; height: 24px; }
+    .card h3 { font-size: 21px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 10px; }
+    .card p { color: var(--muted); font-size: 16px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 28px; list-style: none; }
+    .tags li { font-size: 13px; padding: 5px 11px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+
+    /* Process */
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--line); }
+    .step { padding: 28px 24px 0 0; }
+    .step-num { font-family: "Instrument Serif", serif; font-size: 22px; color: var(--accent); }
+    .step h4 { font-size: 17px; font-weight: 600; margin: 8px 0 6px; }
+    .step p { font-size: 15px; color: var(--muted); }
+
+    /* Contact */
+    .contact {
+      background: var(--ink); color: var(--bg); border-radius: 28px;
+      padding: clamp(40px, 7vw, 80px); text-align: center;
+    }
+    .contact h2 { margin-bottom: 16px; }
+    .contact p { opacity: .7; max-width: 44ch; margin: 0 auto 32px; }
+    .contact .btn-primary { background: var(--accent); color: #fff; }
+
+    footer { padding: 40px 0 48px; color: var(--muted); font-size: 14px; }
+    footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+
+    /* Reveal */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .card, .btn { transition: none; }
+    }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .wrap { padding: 0 16px; }
+      .nav-links { gap: 18px; }
+      .nav-links li:first-child { display: none; }
+      .hero { padding: 64px 0 56px; }
+      section { padding: 56px 0; }
+      .steps { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="wrap" aria-label="Main">
+      <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">n</span>Nook's Cranny</a>
+      <ul class="nav-links">
+        <li><a href="#products">Products</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap">
+        <span class="eyebrow reveal">Software studio · Singapore</span>
+        <h1 class="reveal">Small studio, <em>well-crafted</em> software.</h1>
+        <p class="lede reveal">We design and build iOS apps, websites and the backend systems that power them — thoughtfully made, shipped fast, and built to last.</p>
+        <div class="cta-row reveal">
+          <a class="btn btn-primary" href="#contact">Start a project</a>
+          <a class="btn btn-ghost" href="#products">See what we build</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="products">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2>What we build</h2>
+          <p>Three things, done properly. Pick one, or let us take a product from idea to launch end to end.</p>
+        </div>
+
+        <div class="grid">
+          <article class="card reveal">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg>
+            </div>
+            <h3>iOS apps</h3>
+            <p>Native-feeling iPhone apps built with React Native and Expo — from first prototype through TestFlight to the App Store, with over-the-air updates baked in.</p>
+            <ul class="tags"><li>React Native</li><li>Expo</li><li>TypeScript</li><li>App Store</li></ul>
+          </article>
+
+          <article class="card reveal">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M2 9h20"/><circle cx="5.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="8" cy="6.5" r=".5" fill="currentColor"/></svg>
+            </div>
+            <h3>Websites</h3>
+            <p>Fast, accessible websites and web apps — landing pages, marketing sites and dashboards that look sharp on every screen and load in a blink.</p>
+            <ul class="tags"><li>React</li><li>Next.js</li><li>Static sites</li><li>SEO</li></ul>
+          </article>
+
+          <article class="card reveal">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg>
+            </div>
+            <h3>Backend systems</h3>
+            <p>APIs, databases, auth and infrastructure that quietly do their job — designed to scale with you and easy for your team to reason about.</p>
+            <ul class="tags"><li>APIs</li><li>Postgres</li><li>Auth</li><li>Cloud &amp; Linux</li></ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="process">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2>How we work</h2>
+          <p>Short loops, clear communication, and working software you can hold early.</p>
+        </div>
+        <div class="steps">
+          <div class="step reveal"><span class="step-num">01</span><h4>Discover</h4><p>We learn the problem, the users and what success looks like.</p></div>
+          <div class="step reveal"><span class="step-num">02</span><h4>Design</h4><p>Flows and screens you can click through before a line of production code.</p></div>
+          <div class="step reveal"><span class="step-num">03</span><h4>Build</h4><p>Weekly builds in your hands — on your phone or in your browser.</p></div>
+          <div class="step reveal"><span class="step-num">04</span><h4>Launch</h4><p>Ship to the App Store and the web, then keep improving it with you.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="wrap">
+        <div class="contact reveal">
+          <h2>Have something in mind?</h2>
+          <p>Tell us a little about your idea and we'll get back to you within a couple of days.</p>
+          <a class="btn btn-primary" href="mailto:hello@nookscranny.dev">hello@nookscranny.dev</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© <span id="year">2026</span> Nook's Cranny</span>
+      <span>Made with care in Singapore</span>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const io = 'IntersectionObserver' in window && new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach((el, i) => {
+      el.style.transitionDelay = (i % 4) * 70 + 'ms';
+      io ? io.observe(el) : el.classList.add('in');
+    });
+  </script>
+</body>
+</html>
